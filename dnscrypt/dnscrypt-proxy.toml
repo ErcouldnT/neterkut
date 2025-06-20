@@ -1,16 +1,12 @@
-# Farklı alt portlarda dinliyoruz (Docker üzerinden 5053 ya da 5053).
 listen_addresses = ['0.0.0.0:5053']
+server_names = ['cloudflare']
 
-# "cloudflare-security": kötü amaçlı sitesi engelleyen DNSCrypt backend.
-server_names = ['cloudflare-security', 'cloudflare']
+# require_dnssec = true
+# ipv6_servers = true
 
-# Güvenlik: DNSSEC kontrolü zorunlu
-require_dnssec = true
-ipv6_servers = true
-
-## Source Listeler
 [sources]
   [sources.public-resolvers]
   url = 'https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md'
   cache_file = 'public-resolvers.md'
   minisign_key = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
+
