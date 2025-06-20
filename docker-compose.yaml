@@ -5,7 +5,7 @@ services:
     hostname: neterkut
     environment:
       - TS_AUTHKEY=${TS_AUTHKEY}
-      # - TS_EXTRA_ARGS=--accept-dns=false
+      - TS_EXTRA_ARGS=--accept-dns=false --advertise-exit-node
       - TS_USERSPACE=false
       - TS_STATE_DIR=/var/lib/tailscale
     volumes:
