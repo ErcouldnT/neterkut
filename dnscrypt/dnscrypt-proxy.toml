@@ -2,7 +2,7 @@
 listen_addresses = ['0.0.0.0:5053']
 
 # "cloudflare-security": kötü amaçlı sitesi engelleyen DNSCrypt backend.
-server_names = ['cloudflare-security']
+server_names = ['cloudflare-security', 'cloudflare']
 
 # Güvenlik: DNSSEC kontrolü zorunlu
 require_dnssec = true
