@@ -1,0 +1,47 @@
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tailscale
+    hostname: neterkut
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      # - TS_EXTRA_ARGS=--accept-dns=false
+      - TS_USERSPACE=false
+      - TS_STATE_DIR=/var/lib/tailscale
+    volumes:
+      - ./tailscale-data:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    restart: unless-stopped
+
+  dnscrypt:
+    image: klutchell/dnscrypt-proxy:latest
+    container_name: dnscrypt
+    volumes:
+      - ./dnscrypt:/config
+    network_mode: service:tailscale
+    restart: unless-stopped
+
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    environment:
+      TZ: "Europe/Istanbul"
+      FTLCONF_webserver_api_password: "${PIHOLE_PASSWORD}"
+      FTLCONF_dns_listeningMode: "all"
+      FTLCONF_dns_dnssec: "true"
+      FTLCONF_dns_upstreams: "127.0.0.1#5053"
+    volumes:
+      - ./etc-pihole:/etc/pihole
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+    network_mode: service:tailscale
+    depends_on:
+      - tailscale
+      - dnscrypt
+    restart: unless-stopped
+
+volumes:
+  tailscale-data:

@@ -1,0 +1,4 @@
+.DS_Store
+/etc-dnsmasq.d
+/tailscale-data
+.env
