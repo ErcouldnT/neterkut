@@ -8,8 +8,6 @@ services:
       # - TS_EXTRA_ARGS=--accept-dns=false
       - TS_USERSPACE=false
       - TS_STATE_DIR=/var/lib/tailscale
-    volumes:
-      - ./tailscale-data:/var/lib/tailscale
     devices:
       - /dev/net/tun:/dev/net/tun
     cap_add:
@@ -21,7 +19,7 @@ services:
     image: klutchell/dnscrypt-proxy:latest
     container_name: dnscrypt
     volumes:
-      - ./dnscrypt:/config
+      - ./dnscrypt-proxy.toml:/config/dnscrypt-proxy.toml
     network_mode: service:tailscale
     restart: unless-stopped
 
@@ -35,13 +33,10 @@ services:
       FTLCONF_dns_dnssec: "true"
       FTLCONF_dns_upstreams: "127.0.0.1#5053"
     volumes:
-      - ./etc-pihole:/etc/pihole
-      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+      - ./adlists.list:/etc/pihole/adlists.list:ro
     network_mode: service:tailscale
     depends_on:
       - tailscale
       - dnscrypt
     restart: unless-stopped
 
-volumes:
-  tailscale-data:
